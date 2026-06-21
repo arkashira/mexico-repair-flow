@@ -1,47 +1,53 @@
+import pytest
 from inventory import Inventory, Part
 
 def test_add_part():
     inventory = Inventory()
-    inventory.add_part("1234567890", "Test Part", 10)
-    assert inventory.get_part("1234567890").name == "Test Part"
-    assert inventory.get_part("1234567890").quantity == 10
+    part = Part("Test Part", 10, 5, True)
+    inventory.add_part(part)
+    assert len(inventory.parts) == 1
 
-def test_add_part_to_work_order():
+def test_set_threshold():
     inventory = Inventory()
-    inventory.add_part("1234567890", "Test Part", 10)
-    inventory.add_part_to_work_order("work_order_1", "1234567890")
-    assert len(inventory.get_work_order_parts("work_order_1")) == 1
-    assert inventory.get_part("1234567890").quantity == 9
+    part = Part("Test Part", 10, 5, True)
+    inventory.add_part(part)
+    inventory.set_threshold("Test Part", 3)
+    assert inventory.get_part("Test Part").threshold == 3
 
-def test_update_inventory():
+def test_check_low_stock():
     inventory = Inventory()
-    inventory.add_part("1234567890", "Test Part", 10)
-    inventory.update_inventory("1234567890", 5)
-    assert inventory.get_part("1234567890").quantity == 5
+    part1 = Part("Test Part 1", 10, 5, True)
+    part2 = Part("Test Part 2", 3, 5, True)
+    inventory.add_part(part1)
+    inventory.add_part(part2)
+    low_stock_parts = inventory.check_low_stock()
+    assert len(low_stock_parts) == 1
+    assert low_stock_parts[0].name == "Test Part 2"
 
-def test_get_work_order_parts():
+def test_send_notification():
     inventory = Inventory()
-    inventory.add_part("1234567890", "Test Part", 10)
-    inventory.add_part_to_work_order("work_order_1", "1234567890")
-    assert len(inventory.get_work_order_parts("work_order_1")) == 1
+    part = Part("Test Part", 3, 5, True)
+    inventory.add_part(part)
+    inventory.send_notification(part)
+    # No assertion, just checking it runs without error
+
+def test_update_stock():
+    inventory = Inventory()
+    part = Part("Test Part", 10, 5, True)
+    inventory.add_part(part)
+    inventory.update_stock("Test Part", 5)
+    assert inventory.get_part("Test Part").stock == 15
 
 def test_get_part():
     inventory = Inventory()
-    inventory.add_part("1234567890", "Test Part", 10)
-    assert inventory.get_part("1234567890").name == "Test Part"
+    part = Part("Test Part", 10, 5, True)
+    inventory.add_part(part)
+    retrieved_part = inventory.get_part("Test Part")
+    assert retrieved_part.name == "Test Part"
 
-def test_add_part_to_work_order_part_not_found():
+def test_check_low_stock_edge_case():
     inventory = Inventory()
-    try:
-        inventory.add_part_to_work_order("work_order_1", "1234567890")
-        assert False
-    except ValueError as e:
-        assert str(e) == "Part not found in inventory"
-
-def test_update_inventory_part_not_found():
-    inventory = Inventory()
-    try:
-        inventory.update_inventory("1234567890", 5)
-        assert False
-    except ValueError as e:
-        assert str(e) == "Part not found in inventory"
+    part = Part("Test Part", 5, 5, True)
+    inventory.add_part(part)
+    low_stock_parts = inventory.check_low_stock()
+    assert len(low_stock_parts) == 0

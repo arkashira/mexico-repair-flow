@@ -1,36 +1,46 @@
 import json
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import List
 
 @dataclass
 class Part:
-    upc: str
     name: str
-    quantity: int
+    stock: int
+    threshold: int
+    notify: bool
 
 class Inventory:
     def __init__(self):
-        self.parts: Dict[str, Part] = {}
-        self.work_orders: Dict[str, List[Part]] = {}
+        self.parts = []
 
-    def add_part(self, upc: str, name: str, quantity: int):
-        self.parts[upc] = Part(upc, name, quantity)
+    def add_part(self, part: Part):
+        self.parts.append(part)
 
-    def add_part_to_work_order(self, work_order_id: str, upc: str):
-        if upc not in self.parts:
-            raise ValueError("Part not found in inventory")
-        if work_order_id not in self.work_orders:
-            self.work_orders[work_order_id] = []
-        self.work_orders[work_order_id].append(self.parts[upc])
-        self.parts[upc].quantity -= 1
+    def set_threshold(self, part_name: str, threshold: int):
+        for part in self.parts:
+            if part.name == part_name:
+                part.threshold = threshold
+                break
 
-    def get_work_order_parts(self, work_order_id: str) -> List[Part]:
-        return self.work_orders.get(work_order_id, [])
+    def check_low_stock(self):
+        low_stock_parts = []
+        for part in self.parts:
+            if part.stock < part.threshold:
+                low_stock_parts.append(part)
+        return low_stock_parts
 
-    def get_part(self, upc: str) -> Part:
-        return self.parts.get(upc)
+    def send_notification(self, part: Part):
+        if part.notify:
+            print(f"Low stock alert: {part.name} is below threshold")
 
-    def update_inventory(self, upc: str, quantity: int):
-        if upc not in self.parts:
-            raise ValueError("Part not found in inventory")
-        self.parts[upc].quantity = quantity
+    def update_stock(self, part_name: str, quantity: int):
+        for part in self.parts:
+            if part.name == part_name:
+                part.stock += quantity
+                break
+
+    def get_part(self, part_name: str):
+        for part in self.parts:
+            if part.name == part_name:
+                return part
+        return None
