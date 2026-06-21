@@ -1,31 +1,45 @@
-from mexico_repair_flow import MexicoRepairFlow, Customer, Vehicle, ServiceType, WorkOrder
+from mexico_repair_flow import MexicoRepairFlow, Quote
 import pytest
 
-def test_create_work_order():
+def test_upgrade_to_team_tier():
     flow = MexicoRepairFlow()
-    work_order = flow.create_work_order("John Doe", "123-456-7890", "Toyota", "Camry", 2020, "Oil Change", "Change oil and filter", "Notes")
-    assert work_order.customer.name == "John Doe"
-    assert work_order.vehicle.make == "Toyota"
-    assert work_order.service_type.name == "Oil Change"
-    assert work_order.notes == "Notes"
+    flow.add_quote(Quote(1, 100.0))
+    flow.add_quote(Quote(2, 200.0))
+    flow.add_quote(Quote(3, 300.0))
+    flow.add_quote(Quote(4, 400.0))
+    flow.add_quote(Quote(5, 500.0))
+    flow.upgrade_to_team_tier()
+    assert flow.tier == 'Team'
+    assert flow.get_user_seats() == 3
 
-def test_get_work_orders():
+def test_get_reporting_dashboard():
     flow = MexicoRepairFlow()
-    flow.create_work_order("John Doe", "123-456-7890", "Toyota", "Camry", 2020, "Oil Change", "Change oil and filter", "Notes")
-    work_orders = flow.get_work_orders()
-    assert len(work_orders) == 1
+    flow.add_quote(Quote(1, 100.0))
+    flow.add_quote(Quote(2, 200.0))
+    flow.add_quote(Quote(3, 300.0))
+    flow.add_quote(Quote(4, 400.0))
+    flow.add_quote(Quote(5, 500.0))
+    flow.upgrade_to_team_tier()
+    dashboard = flow.get_reporting_dashboard()
+    assert dashboard['revenue'] == 1500.0
+    assert dashboard['quote_stats'] == 5
 
-def test_validate_work_order():
+def test_get_user_seats():
     flow = MexicoRepairFlow()
-    assert flow.validate_work_order("John Doe", "123-456-7890", "Toyota", "Camry", 2020, "Oil Change", "Change oil and filter", "Notes") == True
-    assert flow.validate_work_order("", "", "", "", 0, "", "", "") == False
+    flow.add_quote(Quote(1, 100.0))
+    flow.add_quote(Quote(2, 200.0))
+    flow.add_quote(Quote(3, 300.0))
+    flow.add_quote(Quote(4, 400.0))
+    flow.add_quote(Quote(5, 500.0))
+    flow.upgrade_to_team_tier()
+    assert flow.get_user_seats() == 3
 
-def test_create_work_order_with_empty_fields():
+def test_upgrade_to_team_tier_before_5_quotes():
     flow = MexicoRepairFlow()
-    with pytest.raises(ValueError):
-        flow.create_work_order("", "", "", "", 0, "", "", "")
-
-def test_create_work_order_with_invalid_vehicle_year():
-    flow = MexicoRepairFlow()
-    with pytest.raises(ValueError):
-        flow.create_work_order("John Doe", "123-456-7890", "Toyota", "Camry", -1, "Oil Change", "Change oil and filter", "Notes")
+    flow.add_quote(Quote(1, 100.0))
+    flow.add_quote(Quote(2, 200.0))
+    flow.add_quote(Quote(3, 300.0))
+    flow.add_quote(Quote(4, 400.0))
+    flow.upgrade_to_team_tier()
+    assert flow.tier == 'Basic'
+    assert flow.get_user_seats() == 0
