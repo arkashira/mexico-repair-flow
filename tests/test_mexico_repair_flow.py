@@ -1,45 +1,56 @@
-from mexico_repair_flow import MexicoRepairFlow, Quote
-import pytest
+from mexico_repair_flow import MexicoRepairFlow, Customer, Vehicle
 
-def test_upgrade_to_team_tier():
+def test_add_customer():
     flow = MexicoRepairFlow()
-    flow.add_quote(Quote(1, 100.0))
-    flow.add_quote(Quote(2, 200.0))
-    flow.add_quote(Quote(3, 300.0))
-    flow.add_quote(Quote(4, 400.0))
-    flow.add_quote(Quote(5, 500.0))
-    flow.upgrade_to_team_tier()
-    assert flow.tier == 'Team'
-    assert flow.get_user_seats() == 3
+    customer = Customer(id=1, name='John Doe', contact_details='john@example.com', vehicles=[])
+    flow.add_customer(customer)
+    assert flow.get_customer(1) == customer
 
-def test_get_reporting_dashboard():
+def test_add_vehicle():
     flow = MexicoRepairFlow()
-    flow.add_quote(Quote(1, 100.0))
-    flow.add_quote(Quote(2, 200.0))
-    flow.add_quote(Quote(3, 300.0))
-    flow.add_quote(Quote(4, 400.0))
-    flow.add_quote(Quote(5, 500.0))
-    flow.upgrade_to_team_tier()
-    dashboard = flow.get_reporting_dashboard()
-    assert dashboard['revenue'] == 1500.0
-    assert dashboard['quote_stats'] == 5
+    vehicle = Vehicle(id=1, make='Toyota', model='Corolla', year=2015, service_history=[])
+    flow.add_vehicle(vehicle)
+    assert flow.get_vehicle(1) == vehicle
 
-def test_get_user_seats():
+def test_get_customer():
     flow = MexicoRepairFlow()
-    flow.add_quote(Quote(1, 100.0))
-    flow.add_quote(Quote(2, 200.0))
-    flow.add_quote(Quote(3, 300.0))
-    flow.add_quote(Quote(4, 400.0))
-    flow.add_quote(Quote(5, 500.0))
-    flow.upgrade_to_team_tier()
-    assert flow.get_user_seats() == 3
+    customer = Customer(id=1, name='John Doe', contact_details='john@example.com', vehicles=[])
+    flow.add_customer(customer)
+    assert flow.get_customer(1) == customer
+    assert flow.get_customer(2) is None
 
-def test_upgrade_to_team_tier_before_5_quotes():
+def test_get_vehicle():
     flow = MexicoRepairFlow()
-    flow.add_quote(Quote(1, 100.0))
-    flow.add_quote(Quote(2, 200.0))
-    flow.add_quote(Quote(3, 300.0))
-    flow.add_quote(Quote(4, 400.0))
-    flow.upgrade_to_team_tier()
-    assert flow.tier == 'Basic'
-    assert flow.get_user_seats() == 0
+    vehicle = Vehicle(id=1, make='Toyota', model='Corolla', year=2015, service_history=[])
+    flow.add_vehicle(vehicle)
+    assert flow.get_vehicle(1) == vehicle
+    assert flow.get_vehicle(2) is None
+
+def test_filter_customers():
+    flow = MexicoRepairFlow()
+    customer1 = Customer(id=1, name='John Doe', contact_details='john@example.com', vehicles=[])
+    customer2 = Customer(id=2, name='Jane Doe', contact_details='jane@example.com', vehicles=[])
+    flow.add_customer(customer1)
+    flow.add_customer(customer2)
+    filtered_customers = flow.filter_customers(name='John Doe')
+    assert len(filtered_customers) == 1
+    assert filtered_customers[0] == customer1
+
+def test_sort_customers():
+    flow = MexicoRepairFlow()
+    customer1 = Customer(id=1, name='John Doe', contact_details='john@example.com', vehicles=[])
+    customer2 = Customer(id=2, name='Jane Doe', contact_details='jane@example.com', vehicles=[])
+    flow.add_customer(customer1)
+    flow.add_customer(customer2)
+    sorted_customers = flow.sort_customers(key='name')
+    assert len(sorted_customers) == 2
+    assert sorted_customers[0].name == 'Jane Doe'
+    assert sorted_customers[1].name == 'John Doe'
+
+def test_get_dashboard():
+    flow = MexicoRepairFlow()
+    customer = Customer(id=1, name='John Doe', contact_details='john@example.com', vehicles=[])
+    flow.add_customer(customer)
+    dashboard = flow.get_dashboard(customer_id=1)
+    assert dashboard['customer'] == customer
+    assert 'vehicles' in dashboard
