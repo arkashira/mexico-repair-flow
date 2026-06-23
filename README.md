@@ -1,6 +1,6 @@
 # Mexico Repair Flow
 
-A Python project for managing customer and vehicle history in a unified dashboard.
+A Python project for managing customer and vehicle data.
 
 ## Installation
 
