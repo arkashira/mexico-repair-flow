@@ -1,10 +1,15 @@
-# Mexico Repair Flow
-A simple customer information management system.
+# Mexico Repair Flow – Quote Generation
 
-## Usage
-1. Create a customer: `customer_manager.create_customer("John Doe", "john@example.com")`
-2. Get a customer: `customer_manager.get_customer(1)`
-3. Update a customer: `customer_manager.update_customer(1, name="Jane Doe", email="jane@example.com")`
-4. Search customers: `customer_manager.search_customers(name="John Doe")`
-5. Save customers to JSON: `customer_manager.save_to_json("customers.json")`
-6. Load customers from JSON: `customer_manager.load_from_json("customers.json")`
+A tiny, pure‑Python library that lets a technician create a repair quote,
+automatically calculates the total price, and keeps the quote in an
+in‑memory list.
+
+## Features
+
+* **Vehicle details** – make, model, year validation.
+* **Service items** – description and price, with validation (no negative
+  prices, description required).
+* **Automatic total** – summed from all service items.
+* **In‑memory storage** – `QuoteManager` holds created quotes and can list them.
+
+## Installation
