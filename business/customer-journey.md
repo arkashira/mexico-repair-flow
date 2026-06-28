@@ -1,0 +1,17 @@
+# Customer Journey Map – Mexico Repair Flow
+
+| Phase | Trigger Event | Friction Points | User Emotions | Opportunities to Delight | Metric |
+|-------|----------------|-----------------|---------------|--------------------------|--------|
+| **Aware** | • Owner sees a competitor using a digital tool in a local trade show.<br>• Receives an email from a local automotive association about digital transformation. | • Limited awareness of digital quoting solutions.<br>• Skepticism about ROI.<br>• Language barrier (Spanish vs. English documentation). | Curious, skeptical, overwhelmed | • Spanish‑only landing page with clear ROI calculator.<br>• Short explainer video (≤2 min) featuring a local shop owner.<br>• Testimonials from 3‑5 Mexican shops. | **Awareness Rate** – % of target shops that visit the website within 30 days of first contact. |
+| **Consider** | • Shop owner researches “software for auto repair shops” on Google.<br>• Receives a referral from a trusted mechanic. | • Confusing pricing tiers.<br>• Lack of localized support (no phone line in Spanish).<br>• Fear of data security (GDPR‑Mexico compliance). | Interested, cautious, hopeful | • Live chat in Spanish with a local sales rep.<br>• Interactive demo sandbox with pre‑loaded sample data.<br>• Clear, localized pricing with a “free trial” badge. | **Consideration Ratio** – % of visitors who request a demo or sign up for a trial. |
+| **Try** | • Owner signs up for a 14‑day free trial.<br>• Receives onboarding email with step‑by‑step guide. | • Slow onboarding (manual data import).<br>• Limited integration with existing point‑of‑sale (POS) systems.<br>• Occasional bugs in the quoting module. | Frustrated, hopeful, cautious | • One‑click data import from CSV/Excel.<br>• Pre‑built POS integrations (e.g., “Coppel POS”).<br>• 24/7 Spanish‑language support chat. | **Trial Activation Rate** – % of trial sign‑ups that complete the first quote within 48 h. |
+| **Adopt** | • Owner completes first quote and receives an accurate estimate.<br>• Receives a notification that the workflow is now automated. | • Resistance to change from staff.<br>• Need for training sessions.<br>• Possible downtime during migration. | Confident, relieved, proud | • On‑site (or virtual) training for staff.<br>• Gamified onboarding checklist with badges.<br>• Dedicated account manager for first 30 days. | **Adoption Rate** – % of shops that transition from trial to paid subscription within 30 days. |
+| **Expand** | • Shop owner sees increased customer satisfaction and reduced errors.<br>• Receives a feature request email from a competitor. | • Unused features due to lack of awareness.<br>• Limited scalability for multi‑location shops.<br>• Need for advanced analytics. | Empowered, loyal, visionary | • Quarterly feature webinars in Spanish.<br>• Multi‑location licensing with centralized dashboard.<br>• Advanced analytics add‑on (inventory forecasting). | **Expansion Rate** – % of active customers that upgrade to higher tier or add new modules within 6 months. |
+
+---
+
+### Notes for Implementation
+- **Localization**: All UI, help docs, and support must be fully Spanish‑only, with optional English for bilingual staff.
+- **Compliance**: Ensure data handling meets Mexican data protection laws (LFPDPPP) and PCI‑DSS for payment processing.
+- **Onboarding**: Use a mix of automated tutorials and live support to reduce friction in the Try phase.
+- **Metrics Tracking**: Integrate analytics to capture each metric; set up alerts for drops in adoption or expansion rates.
